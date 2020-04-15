@@ -30,7 +30,6 @@ grille_2 = [[[0,0,0,0,0],[7,0,0,0,-2],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[5,0,0
 print("voisins du 4 :", resolve.voisins([1,0], grille_2))
 print("voisins du 3 :", resolve.voisins([1,1], grille_2))
 print("voisins du 2 :", resolve.voisins([3,5], grille_2))
-print()
 
 #test 3 deux voisins
 
@@ -61,3 +60,18 @@ resolve.cas_4_deux_voisins([1,1],grille_4)
 resolve.cas_4_deux_voisins([1,3],grille_4)
 
 print_grille(grille_4)
+
+#test 4 trois voisins un 1
+
+print('\n',"test de cas_4_trois_voisins_1 :",'\n')
+
+grille_5 = [[[0,0,0,0,0],[7,0,0,0,-2],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[3,0,0,0,0]],
+            [[1,0,0,0,0],[4,0,0,0,0],[3,0,0,0,0],[4,0,0,0,0],[6,0,0,0,0],[0,0,0,0,0]],
+            [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]],
+            [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[1,0,0,0,0],[5,0,0,0,0],[4,0,0,0,0]]]
+
+resolve.cas_4_trois_voisins_1([3,5],grille_5)
+resolve.cas_4_trois_voisins_1([1,1],grille_5)
+resolve.cas_4_trois_voisins_1([1,3],grille_5)
+
+print_grille(grille_5)

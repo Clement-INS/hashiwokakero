@@ -46,11 +46,11 @@ def crea_pont(point_A, point_B, grille):
 def voisins(Point, grille):
     L = Point[0]
     C = Point[1]
-    Voisin_Haut = [0,0,0]
+    Voisin_H = [0,0,0]
     #les deux premiers numéros correspondent aux coordonnées, le troisième correspond au numéro sur l'ile
-    Voisin_Droit = [0,0,0]
-    Voisin_Bas = [0,0,0]
-    Voisin_Gauche = [0,0,0]
+    Voisin_D = [0,0,0]
+    Voisin_B = [0,0,0]
+    Voisin_G = [0,0,0]
     nb_voisin = 0
     L_aux = L
     C_aux = C
@@ -74,7 +74,7 @@ def voisins(Point, grille):
         #si trouvé ajoute 1 au nombre de voisins et rentre les coordonnées
         if possible:
             nb_voisin = nb_voisin + 1
-            Voisin_Haut = [L_aux, C_aux, grille[L_aux][C_aux][0]]
+            Voisin_H = [L_aux, C_aux, grille[L_aux][C_aux][0]]
     L_aux = L
     C_aux = C
     #cherche un voisin à droite
@@ -97,7 +97,7 @@ def voisins(Point, grille):
         #si trouvé ajoute 1 au nombre de voisins et rentre les coordonnées
         if possible:
             nb_voisin = nb_voisin + 1
-            Voisin_Droit = [L_aux, C_aux, grille[L_aux][C_aux][0]]
+            Voisin_D = [L_aux, C_aux, grille[L_aux][C_aux][0]]
     L_aux = L
     C_aux = C
     #cherche un voisin en bas
@@ -120,7 +120,7 @@ def voisins(Point, grille):
         #si trouvé ajoute 1 au nombre de voisins et rentre les coordonnées
         if possible:
             nb_voisin = nb_voisin + 1
-            Voisin_Bas = [L_aux, C_aux, grille[L_aux][C_aux][0]]
+            Voisin_B = [L_aux, C_aux, grille[L_aux][C_aux][0]]
     L_aux = L
     C_aux = C
     #cherche un voisin à gauche
@@ -143,8 +143,8 @@ def voisins(Point, grille):
         #si trouvé ajoute 1 au nombre de voisins et rentre les coordonnées
         if possible:
             nb_voisin = nb_voisin + 1
-            Voisin_Gauche = [L_aux, C_aux, grille[L_aux][C_aux][0]]
-        return nb_voisin, Voisin_Haut, Voisin_Droit, Voisin_Bas, Voisin_Gauche
+            Voisin_G = [L_aux, C_aux, grille[L_aux][C_aux][0]]
+        return nb_voisin, [Voisin_H, Voisin_D, Voisin_B, Voisin_G]
     
 ###############################################################################################
 #Creer un pont avec les deux voisins si l'ile en argument est un 3 avec deux voisins
@@ -152,16 +152,11 @@ def voisins(Point, grille):
 def cas_3_deux_voisins(point, grille):
     L = point[0]
     C = point[1]
-    nb_voisins, voisin_haut, voisin_droit, voisin_bas, voisin_gauche = voisins(point, grille)
+    nb_voisins, liste_voisins = voisins(point, grille)
     if grille[L][C][0] == 3 and nb_voisins == 2:
-        if voisin_haut[2] != 0:
-            crea_pont(point, voisin_haut, grille)
-        if voisin_droit[2] != 0:
-            crea_pont(point, voisin_droit, grille)
-        if voisin_bas[2] != 0:
-            crea_pont(point, voisin_bas, grille)
-        if voisin_gauche[2] != 0:
-            crea_pont(point, voisin_gauche, grille)
+        for i in range(4):
+            if liste_voisins[i][2] != 0:
+                crea_pont(point, liste_voisins[i], grille)
 
 #########################################################################################
 #Creer un double pont avec les deux voisins si l'ile est un quatre est a que deux voisins
@@ -169,20 +164,48 @@ def cas_3_deux_voisins(point, grille):
 def cas_4_deux_voisins(point,grille):
     L = point[0]
     C = point[1]
-    nb_voisins, voisin_haut, voisin_droit, voisin_bas, voisin_gauche = voisins(point, grille)
+    nb_voisins, liste_voisins = voisins(point, grille)
     if grille[L][C][0] == 4 and nb_voisins == 2:
-        if voisin_haut[2] != 0:
-            crea_pont(point, voisin_haut, grille)
-            crea_pont(point, voisin_haut, grille)
-        if voisin_droit[2] != 0:
-            crea_pont(point, voisin_droit, grille)
-            crea_pont(point, voisin_droit, grille)
-        if voisin_bas[2] != 0:
-            crea_pont(point, voisin_bas, grille)
-            crea_pont(point, voisin_bas, grille)
-        if voisin_gauche[2] != 0:
-            crea_pont(point, voisin_gauche, grille)
-            crea_pont(point, voisin_gauche, grille)
+        for i in range(4):
+            if liste_voisins[i][2] > 1:
+                crea_pont(point, liste_voisins[i], grille)
+                crea_pont(point, liste_voisins[i], grille)
 
 #########################################################################################
-#Creer un double pont avec les deux voisins si l'ile est un quatre est a que deux voisins
+#Si l'ile est un 4 avec 3 voisins dont un 1, créer un pont simple avec les deux autres
+
+def cas_4_trois_voisins_1(point, grille):
+    L = point[0]
+    C = point[1]
+    nb_voisins, liste_voisins = voisins(point, grille)
+    if grille[L][C][0] == 4 and nb_voisins == 3:
+        nb_un = 0
+        for i in range(4):
+            if liste_voisins[i][2] == 1:
+                nb_un = nb_un + 1
+        if nb_un == 1:
+            for i in range(4):
+                if liste_voisins[i][2] > 1:
+                    crea_pont(point, liste_voisins[i], grille)
+
+##############################################################################################################
+#Si l'ile est un 4 avec 3 voisins dont deux 1, créer un pont simple avec les deux 1 et un double avec l'autre
+
+def cas_4_trois_voisins_2(point, grille):
+    L = point[0]
+    C = point[1]
+    nb_voisins, liste_voisins = voisins(point, grille)
+    if grille[L][C][0] == 4 and nb_voisins == 3:
+        nb_un = 0
+        for i in range(4):
+            if liste_voisins[i][2] == 1:
+                nb_un = nb_un + 1
+        if nb_un == 2:
+            for i in range(4):
+                if liste_voisins[i][2] == 1:
+                    crea_pont(point, liste_voisins[i], grille)
+                elif liste_voisins[i][2] > 1:
+                    crea_pont(point, liste_voisins[i], grille)
+                    crea_pont(point, liste_voisins[i], grille)
+
+
